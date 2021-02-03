@@ -1,0 +1,71 @@
+{
+  "name": "market-maker-tools",
+  "version": "1.4.0",
+  "description": "Market maker tools for OpenDEX",
+  "main": "dist/arby.js",
+  "scripts": {
+    "start:arby": "npm run compile && node dist/arby.js",
+    "dev": "npm run compile && concurrently --kill-others \"npm run compile:watch\" \"npm run nodemon:watch\"",
+    "compile": "npm run lint && tsc && cross-os postcompile",
+    "lint": "eslint . --ext .js,.ts",
+    "compile:watch": "tsc -w",
+    "nodemon:watch": "nodemon --watch dist -e js dist/arby.js",
+    "test": "prettier --check src/ && npm run compile && npm run jest:clear:cache && jest",
+    "test:watch": "npm run compile && npm run jest:clear:cache && jest --watch",
+    "jest:clear:cache": "jest --clearCache",
+    "prettier": "prettier --write src/",
+    "clean": "rm -Rf dist/* && npm i"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExchangeUnion/market-maker-tools.git"
+  },
+  "keywords": [
+    "arbitrage",
+    "opendex",
+    "exchange"
+  ],
+  "author": "Karl Ranna",
+  "bugs": {
+    "url": "https://github.com/ExchangeUnion/market-maker-tools/issues"
+  },
+  "homepage": "https://github.com/ExchangeUnion/market-maker-tools#readme",
+  "devDependencies": {
+    "@types/jest": "25.2.3",
+    "@types/node": "14.0.5",
+    "@types/ramda": "0.27.6",
+    "@types/uuid": "8.0.0",
+    "@types/ws": "7.2.4",
+    "@typescript-eslint/eslint-plugin": "3.0.1",
+    "@typescript-eslint/parser": "3.0.1",
+    "concurrently": "5.2.0",
+    "cross-os": "1.3.0",
+    "eslint": "7.1.0",
+    "eslint-plugin-jest": "23.13.2",
+    "google-protobuf": "3.12.1",
+    "jest": "26.6.3",
+    "nodemon": "2.0.4",
+    "prettier": "2.0.5",
+    "ts-jest": "26.4.4",
+    "typescript": "3.9.3"
+  },
+  "dependencies": {
+    "@grpc/grpc-js": "1.1.7",
+    "bignumber.js": "9.0.0",
+    "ccxt": "1.30.51",
+    "dotenv": "8.2.0",
+    "moment": "2.26.0",
+    "ramda": "0.27.0",
+    "rxjs": "6.5.5",
+    "uuid": "8.1.0",
+    "winston": "3.2.1",
+    "ws": "7.3.0"
+  },
+  "cross-os": {
+    "postcompile": {
+      "linux": "rsync -am --include '*/' --include '*.js*' --exclude '*' src/proto/ dist/proto",
+      "darwin": "rsync -am --include '*/' --include '*.js*' --exclude '*' src/proto/ dist/proto",
+      "win32": "xcopy /s src\\proto\\*.js* dist\\proto\\* >nul"
+    }
+  }
+}
